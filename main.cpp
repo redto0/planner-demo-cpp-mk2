@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "filename.txt"
 
 class Polynomial {
     public:
@@ -35,29 +36,64 @@ class Polynomial {
 };
 
 int main() {
-    std::ifstream input("input.txt");
-    if (input.is_open()) {
-        std::pmr::vector<float> vect;
-    }
-    // globals for storing the arrays
-    int startValue 0.01;
-    // the value to incrememt by
-    float delilator = 0.01;
-    // the value to stop at lol
-    int maxDistance = 10; // todo in meters??
-    float current = startValue;
-    // should be polynomial( Start );
-    auto polynomialer = new Polynomial();
-    if(!input) {
-        // TODO read files
-        // input using while(){}
-    }
-    while ( maxDistance > current) {
-        // TODO run through the polynomial with the polynomial
+    using polynomial = Polynomial;
+    polynomial poly;
 
-        current += delilator;
-        // todo pass off P(current) to hybird puresuit node;
+    std::string line;
+
+    // reading the file
+    std::ifstream MyReadFile("filename.txt");
+
+    std::pmr::vector<float> vect;
+    while (getline(MyReadFile, line)) {
+        // parse the polys dilmetate my space or my comma.
+        line = "";
+        const char *char_arr = line.c_str();
+        for (int i = 0; char_arr[i] != '\0'; i++) {
+            if (char_arr[i] == ',') {
+                vect.push_back(std::stof(line));
+                line = "";
+            } else {
+                line.append(&char_arr[i]);
+            }
+        }
+        if ( !line.empty()) {
+            vect.push_back(std::stof(line));
+            line = "";
+        }
     }
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+
+    // closing file
+    MyReadFile.close();
+
+    poly = polynomial(vect);
+
+    // interval for polynomial
+    float max       =   10;
+    float interval  =   0.25;
+    float start     =   0;
+    for (float i = start; i > max; i += interval) {
+        //if (poly != null){
+        if (1){
+            // do left poly math;
+            // <y, -x>
+            float dx = poly.polyDirvative(i);
+            // calulate dx were dy is 1
+            // becuase I dont want to use a wrapper class
+            float dy = 1;
+            // set dy to 1
+            float l = std::sqrt( dx*dx + dy*dy);
+            // find the magnitude
+            dx = dx/l;  // normalize
+            dy = dy/l;  // normalize
+            //cv::Point2d temp;
+            float x = i;                // define x
+            float y = poly.poly(x); // define y
+            x = (x + 7 * dy);      // project x
+            y = (y - 7 * dx);      // project y
+            std::cout << x << ", " << y << std::endl;
+            //nav_points[i].pushback(temp);
+            // return vector as < y, -x >
+        }
+    }
 }
