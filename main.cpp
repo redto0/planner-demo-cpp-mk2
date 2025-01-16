@@ -14,7 +14,7 @@ int main() {
     private:
         std::vector<float> vect;
     public:
-        Polynomial(const std::vector<float>& vect) : vect(vect) {
+        explicit Polynomial(const std::vector<float>& vect) : vect(vect) {
             this->vect = vect;
         }
         Polynomial() = default;
@@ -40,7 +40,7 @@ int main() {
 
     };
     //using polynomial = Polynomial;
-    Polynomial poly;
+    // Polynomial poly;
 
     std::string line;
     int frame_num = 0;
@@ -61,18 +61,19 @@ int main() {
         std::cout << "Error: Could not open MyWriteFile: " << strerror(errno);
     }
 
-    std::vector<float> vect;
+
     std::vector<std::string> stringer;
     while (!MyReadFile.eof()) {
         // store the current line of the file
         // in the "line" variable
+        std::vector<float> vect;
         std::getline(MyReadFile, line);
         std::stringstream ss(line);
         std::string token;
         while (std::getline(ss, token, ' ')) {
             vect.push_back(atof(token.c_str()));
         }
-        poly = Polynomial(vect);
+        // poly = Polynomial(vect);
         // Check if the vector is populated
         if (vect.empty()) {
             std::cerr << "Error: Polynomial vector is empty after reading the file!" << std::endl;
@@ -87,7 +88,7 @@ int main() {
         }
 
         // Set the polynomial object after the file is read
-        poly = Polynomial(vect);
+        auto* poly = new Polynomial(vect);
 
         // interval for polynomial
         float max = 540;
@@ -102,7 +103,7 @@ int main() {
             if (1) { // Always true condition can be removed
                 // do left poly math;
                 // <y, -x>
-                float dy = poly.polyDerivative(i);
+                float dy = poly->polyDerivative(i);
                 // calculate dx where dy is 1
                 // because I don't want to use a wrapper class
                 float dx = 1;
@@ -112,11 +113,11 @@ int main() {
                 dy /= l;  // normalize
                 //cv::Point2d temp;
                 float x = i;                // define x
-                float y = poly.poly(x);     // define y
+                float y = poly->poly(x);     // define y
                 x = (x + 7 * dy);           // project x
                 y = (y - 7 * dx);           // project y
                 //std::cout << x << ", " << y << std::endl;
-                float lengthCheck = sqrt(pow(x - i, 2)  + pow(y - poly.poly(i), 2));
+                float lengthCheck = sqrt(pow(x - i, 2)  + pow(y - poly->poly(i), 2));
                 if (lengthCheck < 7.5 && lengthCheck > 1 ) {
                     std::cout   << " valid " << x << ", " << y << "   length: "<< lengthCheck << std::endl; ;
                     MyWriteFile << " valid " << x << ", " << y << "   length: "<< lengthCheck<< std::endl;
@@ -134,10 +135,11 @@ int main() {
         MyWriteFile << "new polynomial: " + std::to_string(frame_num) << "\n";
         frame_num++;
         if (!outputPrinted) {
-            std::cerr << "No output was printed, possibly due to invalid polynomial data." << std::endl;
-            MyWriteFile << "No output was printed, possibly due to invalid polynomial data." << std::endl;
+            // std::cerr << "No output was printed, possibly due to invalid polynomial data." << std::endl;
+            // MyWriteFile << "No output was printed, possibly due to invalid polynomial data." << std::endl;
 
         }
+        delete poly;
         //std::stringstream ss(line);
     }
 
