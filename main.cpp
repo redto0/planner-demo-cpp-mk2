@@ -7,7 +7,7 @@
 // #include <bits/regex.h>
 // #include "/home/alex/IdeaProjects/Derek Cant Clean Data/src/dereksDataCleaned.txt"
 // #include "Data/Datav1.txt"
-
+#include <vector>
 
 int main() {
     class Polynomial {
@@ -47,11 +47,11 @@ int main() {
 
     // reading the file
     //std::ifstream MyReadFile("/home/alex/IdeaProjects/Derek Cant Clean Data/src/dereksDataCleaned.txt");
-    std::ifstream MyReadFile("/home/alex/CLionProjects/untitled/Data/Datav1.txt");
+    std::ifstream MyReadFile("/home/alex/CLionProjects/untitled/Data/Datav4.txt");
     // std::ifstream MyReadFile("C:/Users/Alex Boccaccio/CLionProjects/untitled/Data/Datav1.txt");
 
     if (!MyReadFile.is_open()) {
-        std::cerr << "Error: Could not open MyReadFile: " << strerror(errno);
+        //std::cerr << "Error: Could not open MyReadFile: " << strerror(errno);
         return 1;
     }
 
@@ -77,7 +77,7 @@ int main() {
         // Check if the vector is populated
         if (vect.empty()) {
             std::cerr << "Error: Polynomial vector is empty after reading the file!" << std::endl;
-            return 1;
+            // return 1;
         }
         float sum = 0;
         for (int i = 0; i < vect.size(); i++) {
@@ -96,7 +96,6 @@ int main() {
         float start = 0;
         float interval = (max - start) / numberOfIntervals;
         bool outputPrinted = false;
-        std::string stringout;
 
         for (float i = start; i <= max; i += interval) {
             // if (poly != null){
@@ -120,10 +119,13 @@ int main() {
                 float lengthCheck = sqrt(pow(x - i, 2)  + pow(y - poly->poly(i), 2));
                 if (lengthCheck < 7.5 && lengthCheck > 1 ) {
                     std::cout   << " valid " << x << ", " << y << "   length: "<< lengthCheck << std::endl; ;
-                    MyWriteFile << " valid " << x << ", " << y << "   length: "<< lengthCheck<< std::endl;
+                    // MyWriteFile << " valid " << x << ", " << y << "   length: "<< lengthCheck<< std::endl;
+                    // MyWriteFile <<"(" << x << ", " << y <<")" <<std::endl;
+                    MyWriteFile << x << " " << y <<std::endl;
                 } else {
-                    // std::cout   << "invalid " << x << ", " << y << std::endl; ;
+                    std::cout   << "invalid " << x << ", " << y << std::endl; ;
                     // MyWriteFile << "invalid " << x << ", " << y << std::endl;
+                    MyWriteFile << x << " " << y << std::endl;
                 }
                 //std::cout << stringout << std::endl;
                 //MyWriteFile << stringout << std::endl;
@@ -132,7 +134,7 @@ int main() {
             }
         }
         std::cout << "new polynomial: "  + std::to_string(frame_num)<< "\n";
-        MyWriteFile << "new polynomial: " + std::to_string(frame_num) << "\n";
+        // MyWriteFile << "new polynomial: " + std::to_string(frame_num) << "\n";
         frame_num++;
         if (!outputPrinted) {
             // std::cerr << "No output was printed, possibly due to invalid polynomial data." << std::endl;
@@ -145,11 +147,13 @@ int main() {
 
     int i = 0;
     while ( i < stringer.size()) {
-        MyWriteFile << stringer[i] << "";
+        // MyWriteFile << stringer[i] << "";
         i++;
     }
 
     MyWriteFile.close();
+
+    // delete poly;
     /*while (std::getline(MyReadFile, line)) {
         // parse the polys, delimitate by spaces (not commas)
 
